@@ -1,0 +1,9 @@
+import React from 'react';
+import { usePlayer } from '../context/PlayerContext.jsx';
+const time = n => Number.isFinite(n) ? `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}` : '0:00';
+export default function PlayerBar(){
+ const p=usePlayer(); if(!p.current) return <div className="player-bar empty-player"><span><i className="bi bi-soundwave me-2"/>Choose a song and start listening</span><span className="text-secondary small">SoundWave</span></div>;
+ const seek=e=>{const v=Number(e.target.value);p.setProgress(v);if(p.audioRef.current)p.audioRef.current.currentTime=v;};
+ const changeVolume=e=>{const v=Number(e.target.value);p.setVolume(v);if(p.audioRef.current)p.audioRef.current.volume=v;};
+ return <div className="player-bar"><div className="now-playing"><img src={p.current.coverUrl} alt=""/><div className="min-w-0"><div className="song-title text-truncate">{p.current.title}</div><div className="song-artist text-truncate">{p.current.artist}</div></div><i className="bi bi-heart ms-2 text-secondary"/></div><div className="player-center"><div className="player-buttons"><button title="Previous" onClick={()=>p.move(-1)}><i className="bi bi-skip-start-fill"/></button><button className="play-button" title={p.playing?'Pause':'Play'} onClick={p.toggle}><i className={`bi ${p.playing?'bi-pause-fill':'bi-play-fill'}`}/></button><button title="Next" onClick={()=>p.move(1)}><i className="bi bi-skip-end-fill"/></button></div><div className="seek-row"><span>{time(p.progress)}</span><input aria-label="Seek" type="range" min="0" max={p.duration||0} step="0.1" value={Math.min(p.progress,p.duration||0)} onChange={seek}/><span>{time(p.duration)}</span></div></div><div className="volume-control"><i className="bi bi-volume-up"/><input aria-label="Volume" type="range" min="0" max="1" step="0.01" value={p.volume} onChange={changeVolume}/></div></div>
+}

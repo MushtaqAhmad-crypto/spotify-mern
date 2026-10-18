@@ -1,0 +1,3 @@
+import React from 'react';
+import { usePlayer } from '../context/PlayerContext.jsx';
+export default function SongCard({song,songs,onAdd}){const p=usePlayer();return <div className="song-card"><div className="cover-wrap"><img src={song.coverUrl} alt={`${song.title} cover`} loading="lazy"/><button className="cover-play" aria-label={`Play ${song.title}`} onClick={()=>p.playSong(song,songs)}><i className="bi bi-play-fill"/></button></div><div className="song-title mt-3 text-truncate">{song.title}</div><div className="song-artist text-truncate">{song.artist}</div>{onAdd&&<button className="btn btn-sm btn-outline-light mt-3" onClick={()=>onAdd(song)}><i className="bi bi-plus-lg me-1"/>Add to playlist</button>}</div>}
